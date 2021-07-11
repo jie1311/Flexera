@@ -1,15 +1,22 @@
 package main
 
 import (
-	"fmt"
+	"errors"
 	"os"
 )
 
 func main() {
+	if len(os.Args) < 3 {
+		err := errors.New("no filepath or application id provided")
+		PrintError(err)
+		return
+	}
+
 	copies, err := CalculateCopiesFromCsv(os.Args[1], os.Args[2])
 	if err != nil {
-		fmt.Println("Error(s) happened during processing, Please verify your input. More info:", err)
-	} else {
-		fmt.Println(copies, "copies are needed.")
+		PrintError(err)
+		return
 	}
+
+	PrintOutput(copies)
 }
